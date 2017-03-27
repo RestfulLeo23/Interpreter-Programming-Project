@@ -84,8 +84,11 @@ bool IT(){
     }
 }
 bool IT_Tail(){
+    int counter=0;
     std::string lex="";
+    counter=count;
     lex=get();
+    count=counter;
     std::cout << "In IT_Tail "<< lex<<"\n";
     if(lex=="-"){
         lex+=get();
@@ -104,7 +107,7 @@ bool IT_Tail(){
         }
     }
     else{
-        return false;
+        return true;
     }
 }
 bool OT(){
@@ -134,7 +137,7 @@ bool OT_Tail(){
             return false;
         }
     }else{
-        return false;
+        return true;
     }
 }
 bool AT(){
@@ -164,7 +167,7 @@ bool AT_Tail(){
             return false;
         }
     }else{
-        return false;
+        return true;
     }
 }
 bool L(){
