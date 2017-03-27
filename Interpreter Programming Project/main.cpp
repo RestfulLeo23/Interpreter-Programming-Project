@@ -23,7 +23,7 @@ bool AT_Tail();
 bool L();
 bool A();
 int count=0;
-std::string output,expression="";
+std::string expression="";
 int main(int argc, char *argv[]) {
     std::cin >> expression;
     if(B()){
@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 std::string get(){
+    std::string output;
     if(!(isWhitespace(expression[count]))){
         output=expression[count];
     }else{
