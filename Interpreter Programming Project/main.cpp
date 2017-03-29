@@ -106,6 +106,7 @@ bool B(){
             return true;
 
         }else{
+            std::cout<< "Expecting '.' but got "<<lex<<"\n";
             return false;
         }
     }else{
@@ -145,6 +146,7 @@ bool IT_Tail(){
         count++;
         lex=SpecialGetChar();
         if(lex==""){
+            std::cout<< "Expecting '>' but got "<<lex<<"\n";
             return false;
         }
         else if(lex==">"){
@@ -169,11 +171,13 @@ bool IT_Tail(){
                 return false;
             }
         }else{
+            std::cout<< "Expecting '>' but got "<<lex<<"\n";
             return false;
         }
     }else if(lex=="."||lex==")"){
         return true;
     }else{
+        std::cout<< "Expecting '-' but got "<<lex<<"\n";
         return false;
     }
 }
@@ -225,6 +229,7 @@ bool OT_Tail(){
     }else if(lex=="-"||lex=="."||lex==")"){
         return true;
     }else{
+        std::cout<< "Expecting 'v' but got "<<lex<<"\n";
         return false;
     }
 }
@@ -278,6 +283,7 @@ bool AT_Tail(){
     }else if(lex=="v"||lex=="-"||lex=="."||lex==")"){
         return true;
     }else{
+        std::cout<< "Expecting '^' but got "<<lex<<"\n";
         return false;
     }
 }
@@ -308,6 +314,7 @@ bool L(){
             return false;
         }
     }else{
+        std::cout<< "Expecting 'T,F,(,~' but got "<<lex<<"\n";
         return false;
     }
 }
