@@ -312,7 +312,7 @@ bool L(){
     }
 }
 /*
- L() is a terminal function that determines if the terminal value we have recieved is defined by our language.
+ A() is a terminal function that determines if the terminal value we have recieved is defined by our language.
  Syntax        Selection Set
  <A>::= T      {T}
     ::= F      {F}
