@@ -5,14 +5,18 @@
 //  Created by Scott English on 3/25/17.
 //  Copyright © 2017 Scott English. All rights reserved.
 //
+//
+/* The input to this program is through the console/command line by simply inputing the string to be checked */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
 #include <iostream>
+#include <stack>
 
+// Function Declerations //
 bool isWhitespace(char input);
-std::string get();
+std::string getChar();
 bool B();
 bool IT();
 bool IT_Tail();
@@ -22,26 +26,40 @@ bool AT();
 bool AT_Tail();
 bool L();
 bool A();
+
+/* 
+
+Global Variables:
+* count is used to contain the character index of the input string. count is incremented after each character contained within the set {~,.,-,>,(,T,F} is munch'd.
+* expression is used to capture the input in main and allow getChar() to access the character needed per each call
+* mystack is used to contain the characters that have been munch'd for there semantic evaluations.
+
+*/
+
 int count=0;
 std::string expression="";
+std::stack<std::string> mystack;
+
+// Function Definitions //
 int main(int argc, char *argv[]) {
     std::cin >> expression;
     if(B()){
         std::cout << "Correct syntax\n";
+        std::cout<<mystack.top()<<"\n";
+        mystack.pop();
     }
     else{
         std::cout << "Incorrect syntax\n";
     }
     return 0;
 }
-std::string get(){
+std::string getChar(){
     std::string output;
     if(!(isWhitespace(expression[count]))){
         output=expression[count];
     }else{
         return output;
     }
-    count++;
     return output;
 }
 bool isWhitespace(char input){
@@ -53,13 +71,10 @@ bool isWhitespace(char input){
     }
 }
 bool B(){
-    std::string lex="";
-    std::cout << "In B "<< lex<<"\n";
+    std::string lex;
     if(IT()){
-        lex=get();
-        std::cout <<lex<<"\n";
+        lex=getChar();
         if(lex=="."){
-            std::cout << "<"<<lex<<">"<<".\n";
             return true;
 
         }else{
@@ -71,8 +86,6 @@ bool B(){
 
 }
 bool IT(){
-    std::cout << "In IT "<<"\n";
-
     if(OT()){
         if(IT_Tail()){
             return true;
@@ -84,16 +97,24 @@ bool IT(){
     }
 }
 bool IT_Tail(){
-    int counter=0;
-    std::string lex="";
-    counter=count;
-    lex=get();
-    count=counter;
-    std::cout << "In IT_Tail "<< lex<<"\n";
+    std::string lex,first,second,output;
+    lex=getChar();
     if(lex=="-"){
-        lex+=get();
-        if(lex=="->"){
+        count++;
+        lex=getChar();
+        if(lex==">"){
+            count++;
             if(OT()){
+                first=mystack.top();
+                mystack.pop();
+                second=mystack.top();
+                mystack.pop();
+                if(first=="T"&&second=="F"){
+                    mystack.push("F");
+                }
+                else{
+                    mystack.push("T");
+                }
                 if(IT_Tail()){
                     return true;
                 }else{
@@ -105,13 +126,13 @@ bool IT_Tail(){
         }else{
             return false;
         }
-    }
-    else{
+    }else if(lex=="."||lex==")"){
         return true;
+    }else{
+        return false;
     }
 }
 bool OT(){
-    std::cout << "In OT "<<"\n";
     if(AT()){
         if(OT_Tail()){
             return true;
@@ -123,26 +144,37 @@ bool OT(){
     }
 }
 bool OT_Tail(){
-    std::string lex="";
-    lex=get();
-    std::cout << "In OT_Tail "<< lex<<"\n";
+    std::string lex,FirstChar,SecondChar;
+    lex=getChar();
     if(lex=="v"){
+        count++;
         if(AT()){
+            SecondChar=mystack.top();
+            mystack.pop();
+            FirstChar=mystack.top();
+            mystack.pop();
+            if(FirstChar=="T" && SecondChar=="T"){
+                mystack.push("T");
+            }else{
+                mystack.push("F");
+            }
             if(OT_Tail()){
                 return true;
             }else{
-                return false;
+                return true;
             }
         }else{
             return false;
         }
-    }else{
+    }else if(lex=="-"||lex=="."||lex==")"){
         return true;
+    }else{
+        return false;
     }
 }
 bool AT(){
-    std::cout << "In AT "<<"\n";
     if(L()){
+        count++;
         if(AT_Tail()){
             return true;
         }else{
@@ -153,35 +185,51 @@ bool AT(){
     }
 }
 bool AT_Tail(){
-    std::string lex="";
-    lex=get();
-    std::cout << "In AT_Tail "<< lex<<"\n";
+    std::string lex,FirstChar,SecondChar;
+    lex=getChar();
     if(lex=="^"){
+        count++;
         if(L()){
+            count++;
+            FirstChar=mystack.top();
+            mystack.pop();
+            SecondChar=mystack.top();
+            mystack.pop();
+            if(FirstChar=="T" && SecondChar=="T"){
+                mystack.push("T");
+            }else{
+                mystack.push("F");
+            }
             if(AT_Tail()){
                 return true;
             }else{
-                return false;
+                return true;
             }
         }else{
             return false;
         }
-    }else{
+    }else if(lex=="v"||lex=="-"||lex=="."||lex==")"){
         return true;
+    }else{
+        return false;
     }
 }
 bool L(){
-    int counter=0;
-    std::string lex="";
-    std::cout << "In L "<< lex<<"\n";
-    counter=count;
-    lex=get();
-    count=counter;
+    std::string lex,output;
+    lex=getChar();
     if(A()){
         return true;
     }
     else if(lex=="~"){
+        count++;
         if(L()){
+            output=mystack.top();
+            mystack.pop();
+            if(output=="T"){
+                mystack.push("F");
+            }else{
+                mystack.push("T");
+            }
             return true;
         }else{
             return false;
@@ -191,17 +239,19 @@ bool L(){
     }
 }
 bool A(){
-    std::string lex="";
-    lex=get();
-    std::cout << "In A "<< lex<<"\n";
-    if(lex =="T"|| lex =="F"){
+    std::string lex;
+    lex=getChar();
+    if((lex=="T")|| (lex=="F")){
+        mystack.push(lex);
         return true;
     }else if(lex=="("){
-        return true;
+        count++;
+        if(IT()){
+            return true;
+        }else{
+            return false;
+        }
     }else{
         return false;
     }
 }
-
-
-
