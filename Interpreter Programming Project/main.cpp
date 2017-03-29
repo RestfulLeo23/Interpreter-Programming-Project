@@ -105,9 +105,9 @@ bool IT_Tail(){
         if(lex==">"){
             count++;
             if(OT()){
-                first=mystack.top();
-                mystack.pop();
                 second=mystack.top();
+                mystack.pop();
+                first=mystack.top();
                 mystack.pop();
                 if(first=="T"&&second=="F"){
                     mystack.push("F");
@@ -191,9 +191,9 @@ bool AT_Tail(){
         count++;
         if(L()){
             count++;
-            FirstChar=mystack.top();
-            mystack.pop();
             SecondChar=mystack.top();
+            mystack.pop();
+            FirstChar=mystack.top();
             mystack.pop();
             if(FirstChar=="T" && SecondChar=="T"){
                 mystack.push("T");
